@@ -3,15 +3,15 @@
 class BaseController extends Controller {
 
 	protected $plan_list = [
-		[
+		1 => [
 			'name' => 'プラン1',
 			'description' => 'ミッドタウンの周り'
 		],
-		[
+		2 => [
 			'name' => 'プラン2',
 			'description' => '自宅の周り'
 		],
-		[
+		3 => [
 			'name' => '皇居',
 			'description' => '皇居の周り'
 		],
@@ -29,5 +29,11 @@ class BaseController extends Controller {
 			$this->layout = View::make($this->layout);
 		}
 	}
+
+	protected function getUserKeys($user_id)
+	{
+		return Cache::get($user_id);
+	}
+
 
 }

@@ -12,14 +12,22 @@
 
 {% block javascript %}
     <script type="text/javascript">
+        var plan_id = {{ plan_id }};
         $(document).ready(function () {
-            var timer_id = null;
+            var time_id = null;
             $('#start').click(function () {
-                timer_id = setInterval(plot, 8000);
+                setInterval(plot, 8000);
+                var date = new Date();
+                time_id = date.getTime();
+                $(this).html('ゴール');
+                $(this).attr('href', '/run/end?user_id=' + user_id + '&time_id=' + time_id);
+                $(this).unbind('click');
+                $(this).attr('id', 'end');
+                return false;
             });
 
             $('#end').click(function () {
-                clearInterval(timer_id);
+                clearInterval(time_id);
             });
 
             function plot() {
@@ -39,6 +47,7 @@
                                 position: latlng,
                                 map: map
                             });
+                            tracking(pos.coords.latitude, pos.coords.longitude);
                         },
                         // （2）位置情報の取得に失敗した場合
                         function (error) {
@@ -65,15 +74,45 @@
                         }
                 );
             }
+            function tracking(lat, lng) {
+                directionsDisplay.setMap(map);
+                points.push({'location': new google.maps.LatLng(lat, lng), stopover:false} );
+                var request = {
+                    origin: new google.maps.LatLng(mylat, mylng),
+                    destination: new google.maps.LatLng(mylat, mylng),
+                    waypoints: points,
+                    travelMode: google.maps.TravelMode.WALKING,
+                };
+                directionsService.route(request, function(response, status) {
+                    if (status == google.maps.DirectionsStatus.OK) {
+                        directionsDisplay.setDirections(response);
+                    }
+                });
+
+                $.get('/run/record', {'user_id' : user_id, 'time_id' : time_id, 'lat' : lat, 'lng' : lng}, function(res){
+                    console.log(res);
+                });
+            }
+            google.maps.event.addListener(directionsDisplay, 'directions_changed', function() {
+                var total = 0;
+                var myroute = directionsDisplay.directions.routes[0];
+                for (i = 0; i < myroute.legs.length; i++) {
+                    total += myroute.legs[i].distance.value;
+                }
+                total = total / 1000.
+                console.log(total);
+                $("#total").html(total + " km");
+                $("#end").attr('href', '/run/end?user_id=' + user_id + '&time_id=' + time_id + '&total=' + total + '&plan_id=' + plan_id);
+            });
         });
     </script>
 {% endblock %}
 
 {% block contents %}
     <div class="cell">
-        <div id="location"></div>
         <div id="map_canvas" style="width:100%; height:250px;"><span class="icon spin icon-64 icon-spinner"></span>
         </div>
-
+        <div id="location"></div>
+        <div id="total"></div>
     </div>
 {% endblock %}

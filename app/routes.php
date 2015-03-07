@@ -21,13 +21,14 @@ Route::group(['prefix' => 'run'], function() {
 	Route::get('/', 'RunController@index');
 	Route::get('/start', 'RunController@start');
 	Route::get('/end', 'RunController@end');
+	Route::get('record', 'RunController@record');
 });
 
 // 走った
 Route::group(['prefix' => 'record'], function() {
-	Route::get('/', function(){
-		return View::make('record.index');
-	});
+	Route::get('/', 'RecordController@index');
+	Route::get('/map', 'RecordController@map');
+	Route::get('/map/get', 'RecordController@get');
 });
 
 // プラン
