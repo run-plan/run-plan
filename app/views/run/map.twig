@@ -3,7 +3,7 @@
 {% block header_right %}
     <div class="col width-fill mobile-width-fill">
         <div class="cell">
-            <ul class="col nav">
+            <ul class="col nav right">
                 <li class="active"><a id="start" href="javascript:void(0);">スタート</a></li>
             </ul>
         </div>
@@ -89,9 +89,7 @@
                     }
                 });
 
-                $.get('/run/record', {'user_id' : user_id, 'time_id' : time_id, 'lat' : lat, 'lng' : lng}, function(res){
-                    console.log(res);
-                });
+                $.get('/run/record', {'user_id' : user_id, 'time_id' : time_id, 'lat' : lat, 'lng' : lng});
             }
             google.maps.event.addListener(directionsDisplay, 'directions_changed', function() {
                 var total = 0;
@@ -100,12 +98,37 @@
                     total += myroute.legs[i].distance.value;
                 }
                 total = total / 1000.
-                console.log(total);
                 $("#total").html(total + " km");
                 $("#end").attr('href', '/run/end?user_id=' + user_id + '&time_id=' + time_id + '&total=' + total + '&plan_id=' + plan_id);
             });
         });
+        var user_id = {{ input_get('user_id') }};
+        function writeRoute() {
+            $.get('/run/get', {'user_id': user_id, 'plan_id': plan_id}, function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    tracking(data[i]['lat'], data[i]['lng']);
+                }
+            });
+        }
+        function tracking(lat, lng) {
+            directionsDisplay.setMap(map);
+            points.push({'location': new google.maps.LatLng(lat, lng), stopover: false});
+            var request = {
+                origin: new google.maps.LatLng(mylat, mylng),
+                destination: new google.maps.LatLng(mylat, mylng),
+                waypoints: points,
+                travelMode: google.maps.TravelMode.WALKING,
+            };
+            directionsService.route(request, function (response, status) {
+                if (status == google.maps.DirectionsStatus.OK) {
+                    directionsDisplay.setDirections(response);
+                }
+            });
+        }
     </script>
+{% endblock %}
+{% block javascript_init %}
+    writeRoute();
 {% endblock %}
 
 {% block contents %}

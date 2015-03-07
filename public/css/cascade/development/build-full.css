@@ -3136,3 +3136,7 @@ pre {
 .icon-renren:before {
     content: "\f18b";
 }
+
+.right {
+    text-align: right;
+}

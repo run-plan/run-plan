@@ -15,7 +15,7 @@
                                 </div>
                                 <div class="col width-fill mobile-width-fill">
                                     <div class="col width-fill mobile-width-fill">
-                                        <a class="fatty" href="/run/start/?plan_id={{ loop.index }}">{{ plan.name }}</a>
+                                        <a class="fatty" href="/run/start/?plan_id={{ loop.index }}&user_id={{ session_get('user_id') }}">{{ plan.name }}</a>
                                     </div>
                                     <div class="col">{{ plan.description }}</div>
                                 </div>

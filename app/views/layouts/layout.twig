@@ -15,7 +15,7 @@
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=TRUE"></script>
     {#<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyA2IPbHZ-twbWgYkA6hZ6_nTwdTzsfNyFA&sensor=TRUE"></script>#}
     <script type="text/javascript">
-        var user_id = {{ user_id?:0 }};
+        var user_id = '{{ session_get('user_id') }}';
         var map = null;
         var mylat = mylng = 0;
         var points = new Array();
@@ -81,6 +81,7 @@
                     title: "現在地"
                 });
 
+                console.log(writeRoute);
                 if (typeof writeRoute == 'function') {
                     writeRoute();
                 }

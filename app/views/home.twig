@@ -1,5 +1,19 @@
 {% extends 'layouts.layout' %}
 
+{% block header_right %}
+    <div class="col width-fill mobile-width-fill">
+        <div class="cell">
+            <ul class="col nav right">
+                {% if session_has('user') %}
+                    <li class="active"><a href="/logout">ログアウト</a></li>
+                {% else %}
+                    <li class="active"><a href="/login">ログイン</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
 {% block contents %}
     <div class="cell">
         <div class="col">
@@ -9,8 +23,12 @@
                         <div class="col width-fill">
                             <div class="col">
                                 <div>
-                                    <img src="/img/parson/iiyama.jpg" alt="">
+                                    <img src="{{ user.picture }}?type=normal" alt="">
+
+                                    <p>{{ user.name }}</p>
+
                                     <p>Rank：ランニングビギナー</p>
+
                                     <p>総距離：123km</p>
                                 </div>
                             </div>
@@ -42,7 +60,7 @@
                             </div>
                             <div class="col width-fill mobile-width-fill">
                                 <div class="col width-fill mobile-width-fill">
-                                    <a class="fatty" href="/record?user_id=1">走った</a>
+                                    <a class="fatty" href="/record?user_id={{ session_get('user_id') }}">走った</a>
                                 </div>
                             </div>
                         </div>

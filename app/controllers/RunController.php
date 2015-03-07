@@ -19,7 +19,7 @@ class RunController extends BaseController
     public function start()
     {
         return View::make('run.map', [
-            'user_id' => 1,
+            'user_id' => Session::get('user_id', ''),
             'plan_id' => Input::get('plan_id')
         ]);
     }
@@ -30,7 +30,7 @@ class RunController extends BaseController
         $key = $user_id . '_' . Input::get('time_id');
         Cache::forever($key, [
             'plan_id' => Input::get('plan_id'),
-            'date' => date('Y-m-d H:m:s'),
+            'date' => date('Y-m-d H:i:s'),
             'total' => Input::get('total'),
             'records' => Cache::has($key) ? Cache::get($key) : [],
         ]);
@@ -45,9 +45,13 @@ class RunController extends BaseController
         $key = Input::get('user_id') . '_' . Input::get('time_id');
         $records = Cache::has($key) ? Cache::get($key) : [];
         $records[] = Input::only(['lat', 'lng']);
-        Log::info($key);
-        Log::info($records);
         Cache::forever($key, $records);
         return 'OK';
+    }
+
+    public function get()
+    {
+        $data = $this->getPlan(Input::get('user_id'), Input::get('plan_id'));
+        return Response::json($data['records']);
     }
 }
