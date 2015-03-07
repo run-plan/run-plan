@@ -16,11 +16,33 @@ Route::get('/', function()
 	return View::make('home');
 });
 
+// 走る
+Route::group(['prefix' => 'run'], function() {
+	Route::get('/', function(){
+		return View::make('run.index');
+	});
+});
+
+// 走った
+Route::group(['prefix' => 'record'], function() {
+	Route::get('/', function(){
+		return View::make('record.index');
+	});
+});
+
+// プラン
 Route::group(['prefix' => 'plan'], function(){
 	Route::get('/', 'PlanController@index');
 	Route::get('/distance', 'PlanController@distance');
 	Route::get('/map', 'PlanController@map');
 
+});
+
+// 友だり
+Route::group(['prefix' => 'friends'], function() {
+	Route::get('/', function(){
+		return View::make('friends.index');
+	});
 });
 
 Route::get('/search/', function () {
@@ -31,6 +53,5 @@ Route::get('/search/', function () {
 		'radius',
 	]);
 	$url = 'https://maps.googleapis.com/maps/api/place/search/json?location=' . $input['location'] . '&radius=' . $input['radius'] . '&types=lodging&language=ja&sensor=false&key=' . $input['api_key'];
-//	$uel = 'https://maps.googleapis.com/maps/api/place/search/json?location=35.6814,139.7674&radius=3000&types=lodging&language=ja&sensor=false&key=AIzaSyCEabJeAlGcLRxfAbv3vhMhSEUjGvEWuj0';
 	return file_get_contents($url);
 });
