@@ -99,11 +99,11 @@
 
 
 .logo {
-    background:url('../img/cascade icons/logo-small-bg.png');
+    background:url('../img/logo-small-bg.png');
 }
 
 .logo:hover {
-    background:url('../img/cascade icons/logo-small-bg-selected.png');
+    background:url('../img/logo-small-bg-selected.png');
 }
 
 .powered-by {

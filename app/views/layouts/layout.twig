@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head lang="ja">
+    <meta charset="UTF-8">
+    <title>RunPlan</title>
+    <link rel="stylesheet" type="text/css" media="all"  href="/css/cascade/development/build-full.css" />
+    <link rel="stylesheet" type="text/css" media="all"  href="/css/site.css" />
+    <!--[if lt IE 8]><link rel="stylesheet" href="/css/cascade/development/icons-ie7.css"><![endif]-->
+    <!--[if lt IE 9]><script src="/js/shim/iehtmlshiv.js"></script><![endif]-->
+</head>
+<body  class="narrow">
+<div class="site-center">
+    <div class="site-body">
+
+        <div class="site-header">
+            <div class="col width-fill sitemenu">
+                <div class="col width-fit mobile-width-fit">
+                    <div class="cell">
+                        <a href="index.html" class="logo"></a>
+                    </div>
+                </div>
+                <div class="col width-fill mobile-width-fill">
+                    <div class="cell">
+                        <ul class="nav">
+                            <li><a href="grid.html">Grid</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sitemenu-responsive col collapsible collapsed">
+                <div class="col collapse-trigger">
+                    <div class="cell">
+                        <ul class="nav ">
+                            <li><a href="#"><span class="icon icon-32 icon-align-justify"></span></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="left collapse-section">
+                        <div class="cell">
+                            <ul class="nav">
+                                <li><a href="index.html">Home</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            {% block contents %}{% endblock %}
+        </div>
+    </div>
+</div>
+</body>
+</html>

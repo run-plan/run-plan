@@ -13,5 +13,17 @@
 
 Route::get('/', function()
 {
-	return View::make('hello');
+	return View::make('home');
 });
+
+Route::group(['prefix' => 'plan'], function(){
+	Route::get('/', 'PlanController@index');
+	Route::get('/distance', 'PlanController@distance');
+	Route::get('/map', 'PlanController@map');
+
+});
+
+Route::get('/map/', function(){
+	Input::all();
+
+})
