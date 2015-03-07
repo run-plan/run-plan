@@ -19,22 +19,46 @@
     directionsDisplay = new google.maps.DirectionsRenderer({draggable: true});
 
     $(document).ready(function(){
+        var marker_list = Array();
         $("#setLocation").click(function(){ 
+            searchPlace(1500);
+        });
+        $('#clearRoute').click(function() {
+            points = new Array();
+            directionsDisplay.setMap(null);
+        });
+        function searchPlace (radius) {
             $.ajax({
                 type: "GET",
                 //dataType: 'jsonp',
-                url: "/search?api_key=AIzaSyCEabJeAlGcLRxfAbv3vhMhSEUjGvEWuj0&location=" + mylat + "," + mylng + "&radius=500",
+                url: "/search?api_key=AIzaSyCEabJeAlGcLRxfAbv3vhMhSEUjGvEWuj0&location=" + mylat + "," + mylng + "&radius="+radius,
                 success: function(msg) {
+                    
                     var data = $.parseJSON(msg);
                     for ( var item in data.results ) {
+                        console.log(data.results[item].name);
                         var myPosition = new google.maps.LatLng(data.results[item].geometry.location.lat, data.results[item].geometry.location.lng);
                         var marker = new google.maps.Marker({
                             position: myPosition,
                             map: map,
                             title: data.results[item].name
                         });
+                        marker_list.push(marker);
+                        
+                        function infoMessage(marker, msg) {
+                            var infoWindow;
+                            google.maps.event.addListener(marker, 'click', function (clickData) {
+                                infoWindow = new google.maps.InfoWindow({ content: msg });
+                                infoWindow.open(marker.getMap(), marker);
+                                setTimeout(function () { infoWindow.close();}, 1*1500);
+                            });
+                            
+                        }
+                        
+                        infoMessage(marker, data.results[item].name);
 
-                        google.maps.event.addListener(marker, 'click', function(clickData) {
+                        /* ルート作成 */
+                        google.maps.event.addListener(marker, 'dblclick', function(clickData) {
                             directionsDisplay.setMap(map);
                             selectedLat= clickData.latLng.k;
                             selectedLng= clickData.latLng.D;
@@ -49,22 +73,22 @@
                                 if (status == google.maps.DirectionsStatus.OK) {
                                     directionsDisplay.setDirections(response);
                                 }
-                            });    
+                            });
+                            marker_list.forEach(function(marker, idx) {
+                                marker.setMap(null);
+                            });
+                            searchPlace(750);
                         });
                     }
                 } 
-            });
-        });
-        $('#clearRoute').click(function() {
-            initialize();
-        });
+            });            
+        }
     });
     function initialize() {
         if (!navigator.geolocation) {
             document.write("Out!!");
             exit;
         }
-        points = new Array();
         google.maps.event.addListener(directionsDisplay, 'directions_changed', function() {
                 var total = 0;
                 var myroute = directionsDisplay.directions.routes[0];
@@ -72,17 +96,18 @@
                     total += myroute.legs[i].distance.value;
                 }
                 total = total / 1000.
-                console.log(total);
                 $("#total").html(total + " km");
             });
 
         navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
-        //watchPosition();
+
         function successCallback(position){
             mylat = position.coords.latitude;
             mylng = position.coords.longitude
             var mapOptions = {
                 center: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
+                maxZoom: 20,
+                minZoom: 15,
                 zoom: 15,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             };
@@ -111,36 +136,11 @@
             console.log(error_msg);
         }
     }
-
-    function watchPosition() {
-        target = {
-            latitude : 0,
-            longitude: 0,
-        }
-
-        options = {
-            enableHighAccuracy: false,
-            timeout: 5000,
-            maximumAge: 0
-        }; 
-        function successCallback(position){
-              var crd = pos.coords;
-              if (target.latitude === crd.latitude && target.longitude === crd.longitude) {
-                  console.log('Congratulations, you reached the target');
-                  navigator.geolocation.clearWatch(id);
-              }
-        }
-        function errorCallback(error) {
-
-        }
-
-        //navigator.geolocation.watchPosition(success, error, options);
-    }
     </script>
   </head>
   <body onload="initialize()">
-    <div id="map_canvas" style="width:100%; height:100%"></div>
-    <button id="setLocation">1kmRUN範囲指定</button>
+    <div id="map_canvas" style="width:100%; height:200px;"></div>
+    <button id="setLocation">3kmRUN範囲指定</button>
     <button id="clearRoute">ルート削除</button>
     <div id="total"></div>
   </body>
