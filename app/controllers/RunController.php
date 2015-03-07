@@ -19,7 +19,7 @@ class RunController extends BaseController
     public function start()
     {
         return View::make('run.map', [
-            'user_id' => Session::get('user_id', ''),
+            'user_id' => Session::get('user_id'),
             'plan_id' => Input::get('plan_id')
         ]);
     }
