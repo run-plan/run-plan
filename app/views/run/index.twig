@@ -1,0 +1,30 @@
+{% extends 'layouts.layout' %}
+
+{% block contents %}
+    <div class="cell">
+        <div class="col width-1of2">
+            <div class="panel cell">
+                <div class="header">Plan list</div>
+
+                {% for plan in plan_list %}
+                    <div class="body">
+                        <div class="cell">
+                            <div class="col">
+                                <div class="col width-fit mobile-width-fit">
+                                    <span class="icon icon-bookmark color-blue"></span>
+                                </div>
+                                <div class="col width-fill mobile-width-fill">
+                                    <div class="col width-fill mobile-width-fill">
+                                        <a class="fatty" href="/run/start/?plan_id={{ loop.index }}">{{ plan.name }}</a>
+                                    </div>
+                                    <div class="col">{{ plan.description }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -18,9 +18,9 @@ Route::get('/', function()
 
 // 走る
 Route::group(['prefix' => 'run'], function() {
-	Route::get('/', function(){
-		return View::make('run.index');
-	});
+	Route::get('/', 'RunController@index');
+	Route::get('/start', 'RunController@start');
+	Route::get('/end', 'RunController@end');
 });
 
 // 走った
