@@ -23,7 +23,14 @@ Route::group(['prefix' => 'plan'], function(){
 
 });
 
-Route::get('/map/', function(){
-	Input::all();
+Route::get('/search/', function () {
 
-})
+	$input = Input::only([
+		'api_key',
+		'location',
+		'radius',
+	]);
+	$url = 'https://maps.googleapis.com/maps/api/place/search/json?location=' . $input['location'] . '&radius=' . $input['radius'] . '&types=lodging&language=ja&sensor=false&key=' . $input['api_key'];
+//	$uel = 'https://maps.googleapis.com/maps/api/place/search/json?location=35.6814,139.7674&radius=3000&types=lodging&language=ja&sensor=false&key=AIzaSyCEabJeAlGcLRxfAbv3vhMhSEUjGvEWuj0';
+	return file_get_contents($url);
+});
