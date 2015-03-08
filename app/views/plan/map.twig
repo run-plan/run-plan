@@ -27,6 +27,9 @@
             searchPlace(1500);
         });
 
+        $('#regist').click(function() {
+            window.location = "/plan";
+        });
         $('#clearRoute').click(function() {
             points = new Array();
             directionsDisplay.setMap(null);
@@ -148,6 +151,7 @@
         <div id="map_canvas" style="width:100%; height:200px;"></div>
         <button id="setLocation">3kmRUN範囲指定</button>
         <button id="clearRoute">ルート削除</button>
+        <button id="regist">登録</button>
         総距離<br />
         <div id="total"></div>
     </div>
