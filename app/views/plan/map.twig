@@ -52,7 +52,7 @@
                         
                         function infoMessage(marker, msg) {
                             var infoWindow;
-                            google.maps.event.addListener(marker, 'click', function (clickData) {
+                            google.maps.event.addListener(marker, 'dblclick', function (clickData) {
                                 infoWindow = new google.maps.InfoWindow({ content: msg });
                                 infoWindow.open(marker.getMap(), marker);
                                 setTimeout(function () { infoWindow.close();}, 1*1500);
@@ -63,7 +63,7 @@
                         infoMessage(marker, data.results[item].name);
 
                         /* ルート作成 */
-                        google.maps.event.addListener(marker, 'dblclick', function(clickData) {
+                        google.maps.event.addListener(marker, 'click', function(clickData) {
                             directionsDisplay.setMap(map);
                             selectedLat= clickData.latLng.k;
                             selectedLng= clickData.latLng.D;
